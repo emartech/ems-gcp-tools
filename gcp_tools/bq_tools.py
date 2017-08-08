@@ -136,15 +136,8 @@ def execute_sync_query(project_id, query_str):
         job = query.job
         wait_for_job(job)
 
-    def result_generator(query, token=None):
-        while True:
-            rows, total_count, token = fetch_query_results(query, token)
-            yield rows
-            if token is None:
-                break
-
     result = []
-    for rows in result_generator(query):
+    for rows in fetch_query_results(query, None):
         result.extend(rows)
 
     return result
