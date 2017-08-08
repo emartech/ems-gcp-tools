@@ -137,8 +137,8 @@ def execute_sync_query(project_id, query_str):
         wait_for_job(job)
 
     result = []
-    for rows in fetch_query_results(query, None):
-        result.extend(rows)
+    for row in fetch_query_results(query, None):
+        result.append(row)
 
     return result
 
