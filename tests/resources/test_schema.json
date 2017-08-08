@@ -1,0 +1,33 @@
+{
+  "schema": {
+    "fields": [
+      {
+        "mode": "NULLABLE",
+        "name": "id",
+        "type": "INTEGER"
+      },
+      {
+        "fields": [
+          {
+            "mode": "NULLABLE",
+            "name": "item_id",
+            "type": "INTEGER"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "desc",
+            "type": "STRING"
+          }
+        ],
+        "mode": "REPEATED",
+        "name": "record",
+        "type": "RECORD"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "event_time",
+        "type": "TIMESTAMP"
+      }
+    ]
+  }
+}
