@@ -8,5 +8,9 @@ setup(
     license='',
     author='ems',
     author_email='',
-    description=''
+    description='',
+    install_requires=[
+        'google-cloud-bigquery',
+        'google-cloud-storage'
+    ],
 )
