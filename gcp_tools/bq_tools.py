@@ -130,6 +130,7 @@ def execute_sync_query(project_id, query_str):
     bq_client = bigquery.Client(project_id)
     query = bq_client.run_sync_query(query_str)
     query.use_legacy_sql = False
+    query.use_query_cache = False
     run_query(query)
 
     if not query.complete:
