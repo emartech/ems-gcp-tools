@@ -1,5 +1,5 @@
 import pytest
-from gcp_tools.error_handling import retry_on_error
+from gcp_tools.error_handling import retry_on_error, DefaultWaitingStrategy, LinearWaitingStrategy
 
 
 def test_retry_on_error_functionWithoutError_calledOnlyOnce():
@@ -51,3 +51,21 @@ def test_retry_on_error_functionWithAlwaysError_calledUntilNumRetriesReachedThen
         test_case.return_without_error()
 
     assert test_case.num_fun_calls == 4
+
+
+def test_default_waiting_strategy():
+    strategy = DefaultWaitingStrategy(2)
+
+    assert 2 == strategy.next(1)
+    assert 4 == strategy.next(2)
+    assert 6 == strategy.next(3)
+    assert 10 == strategy.next(4)
+
+
+def test_linear_waiting_strategy():
+    strategy = LinearWaitingStrategy(3, 7)
+
+    assert 3 == strategy.next(1)
+    assert 10 == strategy.next(2)
+    assert 17 == strategy.next(3)
+
