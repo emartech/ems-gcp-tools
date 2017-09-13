@@ -1,5 +1,5 @@
 import pytest
-from gcp_tools.error_handling import retry_on_error, DefaultWaitingStrategy, LinearWaitingStrategy
+from gcp_tools.error_handling import retry_on_error, DefaultWaitingStrategy, LinearWaitingStrategy, FixedWaitingStrategy
 
 
 def test_retry_on_error_functionWithoutError_calledOnlyOnce():
@@ -60,6 +60,14 @@ def test_default_waiting_strategy():
     assert 4 == strategy.next(2)
     assert 6 == strategy.next(3)
     assert 10 == strategy.next(4)
+
+
+def test_fixed_waiting_strategy():
+    strategy = FixedWaitingStrategy(3, 7)
+
+    assert 3 == strategy.next(1)
+    assert 7 == strategy.next(2)
+    assert 7 == strategy.next(3)
 
 
 def test_linear_waiting_strategy():

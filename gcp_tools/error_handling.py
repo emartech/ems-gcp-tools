@@ -15,6 +15,19 @@ class DefaultWaitingStrategy():
         return self._current
 
 
+class FixedWaitingStrategy():
+
+    def __init__(self, init_wait=5, seconds=5):
+        self._init_wait = init_wait
+        self._seconds = seconds
+
+    def next(self, attempts):
+        if 1 == attempts:
+            return self._init_wait
+        else:
+            return self._seconds
+
+
 class LinearWaitingStrategy():
 
     def __init__(self, init_wait=5, increment=5):
