@@ -339,4 +339,4 @@ class BigqueryHelper():
         self._bq_client = bq_client
 
     def execute_sync_query(self, query_str):
-        execute_sync_query(None, query_str, self._bq_client)
+        return execute_sync_query(None, query_str, self._bq_client)
