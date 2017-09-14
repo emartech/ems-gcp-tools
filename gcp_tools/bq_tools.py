@@ -332,3 +332,11 @@ def fetch_query_results(query, token=None):
 @retry_on_error()
 def run_query(query):
     query.run()
+
+
+class BigqueryHelper():
+    def __init__(self, bq_client):
+        self._bq_client = bq_client
+
+    def execute_sync_query(self, query_str):
+        execute_sync_query(None, query_str, self._bq_client)
