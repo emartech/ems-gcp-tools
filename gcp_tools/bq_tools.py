@@ -200,15 +200,17 @@ async def run_async_worker(work_queue, poll_period, completion_callback):
         job_starter(job)
         logger.debug('Job: {} started.'.format(job_description))
 
-        while not job.state.lower() == 'done' and job.state:
+        assert job.state is not None, "Job {} state is None".format(job.name)
+
+        while not job.state.lower() == 'done':
             await asyncio.sleep(poll_period)
             job_reloader(job)
 
         if job.error_result is None:
             completion_callback(job_description)
-            logger.debug('Job: {} finished: {} s'.format(job_description, time.time() - start_time))
+            logger.info('Job: {} finished: {} s'.format(job_description, time.time() - start_time))
         else:
-            logger.debug('Job: {} finished with error {}: {} s'.format(job_description, job.error_result,
+            logger.info('Job: {} finished with error {}: {} s'.format(job_description, job.error_result,
                                                                        time.time() - start_time))
 
 
