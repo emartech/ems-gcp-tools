@@ -16,6 +16,6 @@ extension_tests = [
 
 
 @pytest.mark.parametrize('input,extensions,expected_output', extension_tests)
-def test_strip_extension(input, extensions, expected_output):
+def test_strip_extension_returnsExpectedOutput(input, extensions, expected_output):
     stripped_filename = strip_extension(input, extensions)
     assert stripped_filename == expected_output

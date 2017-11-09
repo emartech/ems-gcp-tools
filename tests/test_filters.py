@@ -16,7 +16,7 @@ table_names_for_test_filter_table_name = [
 
 @pytest.mark.parametrize('bq_table_name,bq_table_pattern,only_date_shards,expected_output',
                          table_names_for_test_filter_table_name)
-def test_filter_table_name(bq_table_name, bq_table_pattern, only_date_shards, expected_output):
+def test_filter_table_name_worksCorrectly(bq_table_name, bq_table_pattern, only_date_shards, expected_output):
     output = filter_table_name(bq_table_name, bq_table_pattern, only_date_shards)
     assert output == expected_output
 
@@ -34,6 +34,6 @@ table_names_for_test_filter_table_name_by_shard_name = [
 
 @pytest.mark.parametrize('bq_table_name,min_shard_date,max_shard_date,expected_output',
                          table_names_for_test_filter_table_name_by_shard_name)
-def test_filter_table_name_by_shard_date(bq_table_name, min_shard_date, max_shard_date, expected_output):
+def test_filter_table_name_by_shard_date_worksCorrectly(bq_table_name, min_shard_date, max_shard_date, expected_output):
     output = filter_table_name_by_shard_date(bq_table_name, min_shard_date, max_shard_date)
     assert output == expected_output

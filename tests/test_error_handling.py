@@ -3,7 +3,6 @@ from gcp_tools.error_handling import retry_on_error, DefaultWaitingStrategy, Lin
 
 
 def test_retry_on_error_functionWithoutError_calledOnlyOnce():
-
     class RetryOnErrorTestClass():
         def __init__(self):
             self.num_fun_calls = 0
@@ -18,7 +17,6 @@ def test_retry_on_error_functionWithoutError_calledOnlyOnce():
 
 
 def test_retry_on_error_functionWithSingleError_calledOnlyTwice():
-
     class RetryOnErrorTestClass():
         def __init__(self):
             self.num_fun_calls = 0
@@ -36,7 +34,6 @@ def test_retry_on_error_functionWithSingleError_calledOnlyTwice():
 
 
 def test_retry_on_error_functionWithAlwaysError_calledUntilNumRetriesReachedThenExceptionRaised():
-
     class RetryOnErrorTestClass():
         def __init__(self):
             self.num_fun_calls = 0
@@ -53,7 +50,7 @@ def test_retry_on_error_functionWithAlwaysError_calledUntilNumRetriesReachedThen
     assert test_case.num_fun_calls == 4
 
 
-def test_default_waiting_strategy():
+def test_constructor_defaultWaitingStrategy():
     strategy = DefaultWaitingStrategy(2)
 
     assert 2 == strategy.next(1)
@@ -62,7 +59,7 @@ def test_default_waiting_strategy():
     assert 10 == strategy.next(4)
 
 
-def test_fixed_waiting_strategy():
+def test_constructor_fixedWaitingStrategy():
     strategy = FixedWaitingStrategy(3, 7)
 
     assert 3 == strategy.next(1)
@@ -70,10 +67,9 @@ def test_fixed_waiting_strategy():
     assert 7 == strategy.next(3)
 
 
-def test_linear_waiting_strategy():
+def test_constructor_linearWaitingStrategy():
     strategy = LinearWaitingStrategy(3, 7)
 
     assert 3 == strategy.next(1)
     assert 10 == strategy.next(2)
     assert 17 == strategy.next(3)
-
