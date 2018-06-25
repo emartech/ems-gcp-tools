@@ -161,6 +161,17 @@ def start_batch_query(client, query, dest_table,
     return job_name
 
 
+def start_batch_dml_query(client, query, use_legacy_sql=False):
+    job_name = "dml_query" + '_' + str(uuid.uuid4())
+    job = client.run_async_query(job_name, query)
+    job.priority = 'BATCH'
+    job.use_legacy_sql = use_legacy_sql
+    logger.debug('Submitting job {}'.format(job_name))
+    job_starter(job)
+
+    return job_name
+
+
 def execute_async_jobs(job_list, num_workers=50, poll_period=5, description='', completion_callback=None):
     description = description or uuid.uuid4()
     logger.debug('Job list: {} started.'.format(description))
