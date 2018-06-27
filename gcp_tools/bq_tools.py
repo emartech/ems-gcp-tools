@@ -148,28 +148,31 @@ def execute_sync_query(project_id, query_str, bq_client=None):
 def start_batch_query(client, query, dest_table,
                       create_dispostion=CreateDisposition.CREATE_IF_NEEDED,
                       write_disposition=WriteDisposition.WRITE_TRUNCATE, use_legacy_sql=False):
-    job_name = dest_table.name.replace('$', '-DOLLAR-') + '_' + str(uuid.uuid4())
-    job = client.run_async_query(job_name, query)
+    job_name_prefix = dest_table.name.replace('$', '-DOLLAR-')
+    job = _create_batch_query_job(client, job_name_prefix, query, use_legacy_sql)
     job.destination = dest_table
-    job.priority = 'BATCH'
     job.create_disposition = create_dispostion
     job.write_disposition = write_disposition
-    job.use_legacy_sql = use_legacy_sql
-    logger.debug('Submitting job {}'.format(job_name))
+    logger.debug('Submitting job {}'.format(job.name))
     job_starter(job)
 
-    return job_name
+    return job.name
 
 
-def start_batch_dml_query(client, query, use_legacy_sql=False):
-    job_name = "dml_query" + '_' + str(uuid.uuid4())
+def start_batch_dml_query(client, query, job_name_prefix="dml_query", use_legacy_sql=False):
+    job = _create_batch_query_job(client, job_name_prefix, query, use_legacy_sql)
+    logger.debug('Submitting job {}'.format(job.name))
+    job_starter(job)
+
+    return job.name
+
+
+def _create_batch_query_job(client, job_name_prefix, query, use_legacy_sql):
+    job_name = job_name_prefix + '_' + str(uuid.uuid4())
     job = client.run_async_query(job_name, query)
     job.priority = 'BATCH'
     job.use_legacy_sql = use_legacy_sql
-    logger.debug('Submitting job {}'.format(job_name))
-    job_starter(job)
-
-    return job_name
+    return job
 
 
 def execute_async_jobs(job_list, num_workers=50, poll_period=5, description='', completion_callback=None):
