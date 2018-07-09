@@ -6,7 +6,7 @@ import uuid
 
 import copy
 from google.cloud import bigquery
-from google.cloud.bigquery.job import DestinationFormat, WriteDisposition, CreateDisposition
+from google.cloud.bigquery.job import DestinationFormat, WriteDisposition, CreateDisposition, QueryJobConfig
 from google.cloud.exceptions import NotFound, Conflict
 
 from gcp_tools.gcs_tools import get_bucket
@@ -129,17 +129,18 @@ def wait_for_job(job):
 def execute_sync_query(project_id, query_str, bq_client=None):
     if bq_client is None:
         bq_client = bigquery.Client(project_id)
-    query = bq_client.run_sync_query(query_str)
-    query.use_legacy_sql = False
-    query.use_query_cache = False
-    run_query(query)
+    whatever = QueryJobConfig()
+    whatever.use_legacy_sql = False
+    whatever.use_query_cache = False
+    query_job = bq_client.query(query_str, job_config=whatever, location="EU")
+    # run_query(query)
 
-    if not query.complete:
-        job = query.job
-        wait_for_job(job)
+    # if not query.complete:
+    #     job = query.job
+    #     wait_for_job(job)
 
     result = []
-    for row in fetch_query_results(query, None):
+    for row in query_job:
         result.append(row)
 
     return result
@@ -356,3 +357,6 @@ class BigqueryHelper():
 
     def execute_sync_query(self, query_str):
         return execute_sync_query(None, query_str, self._bq_client)
+
+if __name__ == '__main__':
+    execute_sync_query("ems-data-platform-dev", "select * from `ac_programs_raw.ac_programs`")

@@ -1,8 +1,9 @@
 import os
 import time
-from google.cloud import storage
 
 import logging
+
+from google.cloud import storage
 
 from gcp_tools.error_handling import retry_on_error
 
